@@ -1,18 +1,9 @@
-<h1>Yummy Recipes React App</h1>
-<a href="https://www.codacy.com/app/pndemo/yummy-recipes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pndemo/yummy-recipes&amp;utm_campaign=Badge_Grade">
-<img class="notice-badge" src="https://api.codacy.com/project/badge/Grade/1512eaed87c44b8794ca3aae2154c76b" alt="Badge"/>
+<h1>Yummy Recipes App</h1>
+<a href="https://travis-ci.org/pndemo/yummy-recipes-react">
+<img class="notice-badge" src="https://travis-ci.org/pndemo/yummy-recipes-react.svg?branch=develop" alt="Badge"/>
 </a>
-<a href="https://travis-ci.org/pndemo/yummy-recipes-api">
-<img class="notice-badge" src="https://travis-ci.org/pndemo/yummy-recipes-api.svg?branch=master" alt="Badge"/>
-</a>
-<a href="https://coveralls.io/github/pndemo/yummy-recipes-api">
-<img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes-api/badge.svg?branch=master" alt="Badge"/>
-</a>
-<a href="https://www.python.org/dev/peps/pep-0008/">
-<img class="notice-badge" src="https://img.shields.io/badge/code%20style-pep8-orange.svg" alt="Badge"/>
-</a>
-<a href="https://github.com/pndemo/yummy-recipes-api/blob/develop/License.md">
-<img class="notice-badge" src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="Badge"/>
+<a href="https://coveralls.io/github/pndemo/yummy-recipes-react">
+<img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes-react/badge.svg?branch=develop" alt="Badge"/>
 </a>
 <br/>
 <h2>About Yummy Recipes App</h2>
