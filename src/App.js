@@ -1,36 +1,45 @@
+/*
+* -- Main application component --
+*  Displays home page for unauthenticated user
+*  Displays recipe categories for authenticated user
+*/
+
 import React, { Component } from 'react';
-import { categoryAPIURL } from './config';
-import axios from 'axios'
+import Header from './components/common/Header';
+import FooterFlex from './components/common/FooterFlex';
+import FooterStatic from './components/common/FooterStatic';
+import Categories from './components/category/Categories';
 
-import Header from './components/header';
-import Footer from './components/footer';
-import Categories from './category/categories';
-
-import './App.css';
+// Application styling
+import './static/App.css';
 
 class App extends Component {
+  // App component properties
   constructor(props) {
     super(props);
     this.state = {
-      isLogged: localStorage.getItem('token'),
+      isLoggedIn: localStorage.getItem('token'),
     };
   }
 
+  // Component rendering
   render() {
-    if (this.state.isLogged) {
+    if (this.state.isLoggedIn) {
+      // Render recipe categories
       return (
         <div className="App-light">
-          <Header/>
-          <Categories/>
-          <Footer/>
+          <Header />
+          <Categories />
+          <FooterFlex />
         </div>
       );
     }
     return (
+      // Render home page
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">
-            <span className="glyphicon glyphicon-fire"></span> Yummy Recipes
+            <span className="glyphicon glyphicon-fire" /> Yummy Recipes
           </h1>
         </header>
         <div className="row">
@@ -64,7 +73,7 @@ class App extends Component {
             </span>
           </div>
         </div>
-        <Footer/>
+        <FooterStatic />
       </div>
     );
   }
