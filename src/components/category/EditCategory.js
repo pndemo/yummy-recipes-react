@@ -1,13 +1,22 @@
-import React, {Component} from 'react';
-import { Redirect } from 'react-router-dom';
-import { categoryAPIURL } from '../config';
-import Header from '../components/header';
-import Footer from '../components/footer';
-import axios from 'axios'
+/*
+* -- Edit categories application component --
+*  Enables a user to edit a category
+*/
 
-import '../App.css';
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { categoryAPIURL } from '../../config';
+import privateAxiosInstance from '../../config';
+import Header from '../common/Header';
+import FooterFlex from '../common/FooterFlex';
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+
+// Application styling
+import '../../static/App.css';
 
 class EditCategory extends Component {
+    // App component properties
     constructor(props) {
         super(props);
         this.state = {
@@ -16,8 +25,9 @@ class EditCategory extends Component {
         };
     }
     
+    // Get category details
     componentWillMount() {
-        axios.get(`${ categoryAPIURL }${ this.props.match.params.category_id }`, { 'headers': { 'Authorization': 'Bearer ' + localStorage.getItem('token') }})
+        privateAxiosInstance.get(`${ categoryAPIURL }${ this.props.match.params.category_id }`)
         .then((response) => {
           if (response.status === 200) {
             this.setState({
@@ -28,25 +38,26 @@ class EditCategory extends Component {
         .catch((error) => {
           let message = error.response.data['message'];
         });
-      }
+    }
 
+    // Reset state
     resetState = () => {
         this.setState({
             categoryName: '',
         });
     };
 
+    // When input changes
     onInputChanged = (event) => {
         this.setState({
             [event.target.name]: event.target.value
         })
     };
 
+    // Handle edit category
     editCategoryHandler = (event) => {
         event.preventDefault();
-
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-        axios.put(`${ categoryAPIURL }${ this.props.match.params.category_id }`,
+        privateAxiosInstance.put(`${ categoryAPIURL }${ this.props.match.params.category_id }`,
         {
             category_name: this.state.categoryName,
         })
@@ -55,16 +66,18 @@ class EditCategory extends Component {
             this.setState({
                 isEdited: true,
             })
+            toast.success('Category has been updated.')
         })
         .catch((error) => {
             if (error.response.status === 400) {
                 document.getElementById("error").innerHTML = error.response.data['category_name_message'];
             } else {
-                document.getElementById("error").innerHTML = ""
+                document.getElementById("error").innerHTML = error.response.data['message'];
             }
         });
     };
 
+    // Component rendering
     render() {
         if (this.state.isEdited) {
             return <Redirect to="/"/>
@@ -93,13 +106,13 @@ class EditCategory extends Component {
                                         placeholder="Category name"/>
                                 </div>
                                 <div className="form-group">
-                                    <button type="submit" className="btn btn-primary btn-block App-btn-add">Add</button>
+                                    <button type="submit" className="btn btn-primary btn-block App-btn-add">EDIT</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <Footer/>
+                <FooterFlex/>
             </div>
         );
     }

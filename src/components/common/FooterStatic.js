@@ -1,11 +1,10 @@
-import { Link } from 'react-router-dom';
-import React, { Factory } from 'react';
+import React from 'react';
 
-import '../App.css';
+import '../../static/App.css';
 
 function Footer() {
   return (
-    <footer className="App-footer">
+    <footer className="App-footer-static">
       <p className="App-copyright">&copy; 2018 Yummy Recipes LLC</p>
     </footer>
   );

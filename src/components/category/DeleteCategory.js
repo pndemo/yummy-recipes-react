@@ -1,13 +1,22 @@
-import React, {Component} from 'react';
-import { Redirect } from 'react-router-dom';
-import { categoryAPIURL } from '../config';
-import Header from '../components/header';
-import Footer from '../components/footer';
-import axios from 'axios'
+/*
+* -- Delete categories application component --
+*  Enables a user to delete a category
+*/
 
-import '../App.css';
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { categoryAPIURL } from '../../config';
+import privateAxiosInstance from '../../config';
+import Header from '../common/Header';
+import FooterFlex from '../common/FooterFlex';
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+
+// Application styling
+import '../../static/App.css';
 
 class DeleteCategory extends Component {
+    // App component properties
     constructor(props) {
         super(props);
         this.state = {
@@ -16,8 +25,9 @@ class DeleteCategory extends Component {
         };
     }
 
+    // Get category details
     componentWillMount() {
-        axios.get(`${ categoryAPIURL }${ this.props.match.params.category_id }`, { 'headers': { 'Authorization': 'Bearer ' + localStorage.getItem('token') }})
+        privateAxiosInstance.get(`${ categoryAPIURL }${ this.props.match.params.category_id }`)
         .then((response) => {
           if (response.status === 200) {
             this.setState({
@@ -26,28 +36,26 @@ class DeleteCategory extends Component {
           }
         })
         .catch((error) => {
-          let message = error.response.data['message'];
+            document.getElementById("error").innerHTML = error.response.data['message'];
         });
-      }
+    }
 
+    // Handle delete category
     deleteCategoryHandler = (event) => {
         event.preventDefault();
-
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-        axios.delete(`${ categoryAPIURL }${ this.props.match.params.category_id }`,
-        {
-            category_name: this.state.categoryName,
-        })
+        privateAxiosInstance.delete(`${ categoryAPIURL }${ this.props.match.params.category_id }`)
         .then((response) => {
             this.setState({
                 isDeleted: true,
             })
+            toast.success('Category has been deleted.')
         })
         .catch((error) => {
-
+            document.getElementById("error").innerHTML = error.response.data['message'];
         });
     };
 
+    // Component rendering
     render() {
         if (this.state.isDeleted) {
             return <Redirect to="/"/>
@@ -75,7 +83,7 @@ class DeleteCategory extends Component {
                         </div>
                     </div>
                 </div>
-                <Footer/>
+                <FooterFlex/>
             </div>
         );
     }

@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: Login Display Login 1`] = `
+<div
+  className="App-light"
+>
+  <div
+    className="container-fluid"
+  >
+    <div
+      className="row"
+    >
+      <div
+        className="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-sm-offset-1 col-md-offset-2 col-lg-offset-3"
+      >
+        <div
+          className="App-header"
+        >
+          <h1
+            className="App-title-form"
+          >
+            <span
+              className="glyphicon glyphicon-fire"
+            />
+             Yummy Recipes
+          </h1>
+        </div>
+        <div
+          className="panel panel-primary"
+        >
+          <div
+            className="panel-heading text-center"
+          >
+            Login
+          </div>
+          <div
+            className="panel-body"
+          >
+            <form
+              onSubmit={[Function]}
+            >
+              <p
+                className="error"
+                id="error"
+              />
+              <div
+                className="form-group"
+              >
+                <input
+                  className="form-control"
+                  maxLength="50"
+                  name="username"
+                  onChange={[Function]}
+                  placeholder="Username"
+                  type="text"
+                  value=""
+                />
+                <p
+                  className="text-left error"
+                  id="usernameError"
+                />
+              </div>
+              <div
+                className="form-group"
+              >
+                <input
+                  className="form-control"
+                  maxLength="50"
+                  name="password"
+                  onChange={[Function]}
+                  placeholder="Password"
+                  type="password"
+                  value=""
+                />
+                <p
+                  className="text-left error"
+                  id="passwordError"
+                />
+              </div>
+              <div
+                className="form-group"
+              >
+                <button
+                  className="btn btn-primary btn-block"
+                  type="submit"
+                >
+                  Login
+                </button>
+              </div>
+              <p
+                className="form-group text-center"
+              >
+                Don't have an account? 
+                <a
+                  href="/register"
+                >
+                  Register
+                </a>
+              </p>
+              <p
+                className="form-group text-center"
+              >
+                Forgot password? 
+                <a
+                  href="/reset_password"
+                >
+                  Reset
+                </a>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer
+      className="App-footer-static"
+    >
+      <p
+        className="App-copyright"
+      >
+        © 2018 Yummy Recipes LLC
+      </p>
+    </footer>
+  </div>
+</div>
+`;

@@ -9,7 +9,7 @@
 .App-light {
   text-align: center;
   background: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,0.6));
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .App-header {
@@ -62,13 +62,21 @@
   border: 1px solid #ff4c4c;
 }
 
-.App-footer {
+.App-footer-static {
   bottom: 0;
   color: white;
   height: 65px;
   left: 0;
   position: absolute;
   width: 100%;
+}
+.App-footer-flex {
+  bottom: 0;
+  color: white;
+  height: 65px;
+  left: 0;
+  width: 100%;
+  margin-top: 4em;
 }
 
 form {
@@ -136,21 +144,9 @@ a:hover {
 }
 
 .search-input {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
   border: 1px solid #ff4c4c;
 }
-
-@media screen and (min-width: 970px) {
-  .search-input {
-    width: 25em !important;
-  }
-
-}
-
 .search-button {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
   border: 1px solid #ff4c4c;
   color: #ff0000;
   font-weight: bold;
@@ -169,7 +165,7 @@ a:hover {
   color: #ffe5e5 !important;
 }
 
-.glyphicon-user {
+.glyphicon-user, .glyphicon-log-out {
   font-size: 1.2em;
   margin-right: 7px;
 }
@@ -196,8 +192,11 @@ a:hover {
   border-bottom: 1px solid #ff9999;
 }
 
-.card-text {
+.card-text-light {
   color: #999999;
+}
+.card-text-dark {
+  color: #333333;
 }
 
 .card-link {
@@ -210,20 +209,10 @@ a:hover {
   border: 1px solid #ff6666;
   color: #ff6666;
   font-weight: bold;
-  margin-bottom: 1em;
   text-shadow: 0 0 0;
 }
 .App-btn-add:hover {
   background-color: #ffe5e5;
   border: 1px solid #ff1919;
   color: #ff1919;
-}
-
-@media screen and (min-width: 970px) {
-  .navbar-left {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    text-align: center;
-  }
 }

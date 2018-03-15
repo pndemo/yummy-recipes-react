@@ -1,13 +1,22 @@
+/*
+* -- Add category application component --
+*  Enables a user to add a category
+*/
+
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { categoryAPIURL } from '../config';
-import Header from '../components/header';
-import Footer from '../components/footer';
+import { categoryAPIURL } from '../../config';
+import privateAxiosInstance from '../../config';
+import Header from '../common/Header';
+import FooterFlex from '../common/FooterFlex';
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
 
-import '../App.css';
+// Application styling
+import '../../static/App.css';
 
 class AddCategory extends Component {
+    // App component properties
     constructor(props) {
         super(props);
         this.state = {
@@ -16,40 +25,44 @@ class AddCategory extends Component {
         };
     }
 
+    // Reset state
     resetState = () => {
         this.setState({
             categoryName: '',
         });
     };
 
+    // When input changes
     onInputChanged = (event) => {
         this.setState({
             [event.target.name]: event.target.value
         })
     };
 
+    // Handle add category
     addCategoryHandler = (event) => {
         event.preventDefault();
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
-        axios.post(`${ categoryAPIURL }`,
+        privateAxiosInstance.post(`${ categoryAPIURL }`,
             {
                 category_name: this.state.categoryName,
+        })
+        .then((response) => {
+            this.resetState()
+            this.setState({
+                isAdded: true,
             })
-            .then((response) => {
-                this.resetState()
-                this.setState({
-                    isAdded: true,
-                })
-            })
-            .catch((error) => {
-                if (error.response.status === 400) {
-                    document.getElementById("error").innerHTML = error.response.data['category_name_message'];
-                } else {
-                    document.getElementById("error").innerHTML = "";
-                }
-            });
+            toast.success('Category has been added.')
+        })
+        .catch((error) => {
+            if (error.response.status === 400) {
+                document.getElementById("error").innerHTML = error.response.data['category_name_message'];
+            } else {
+                document.getElementById("error").innerHTML = error.response.data['message'];
+            }
+        });
     };
 
+    // Component rendering
     render() {
         if (this.state.isAdded) {
             return <Redirect to="/"/>
@@ -84,7 +97,7 @@ class AddCategory extends Component {
                         </div>
                     </div>
                 </div>
-                <Footer/>
+                <FooterFlex/>
             </div>
         );
     }

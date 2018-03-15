@@ -1,3 +1,8 @@
+/*
+* -- Logout application component --
+*  Enables a user to logout
+*/
+
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
@@ -7,8 +12,9 @@ class Logout extends Component {
     localStorage.removeItem('token');
   }
 
+  // Redirects user to login page after logout
   render() {
-    return <Redirect to="/login" />;
+    return <Redirect to="/" />;
   }
 }
 

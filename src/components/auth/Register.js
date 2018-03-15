@@ -1,13 +1,20 @@
+/*
+* -- Register application component --
+*  Enables a new user to create an account
+*/
+
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { authAPIURL } from '../config';
+import { authAPIURL } from '../../config';
+import FooterStatic from '../common/FooterStatic';
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
 
-import Footer from '../components/footer';
-
-import '../App.css';
+// Application styling
+import '../../static/App.css';
 
 class Register extends Component {
+    // App component properties
     constructor(props) {
         super(props);
         this.state = {
@@ -19,31 +26,34 @@ class Register extends Component {
         };
     }
 
+    // When input changes
     onInputChanged = (event) => {
         this.setState({
             [event.target.name]: event.target.value
         })
     };
 
+    // Handle user registration
     onRegisterClick = (event) => {
         event.preventDefault();
-
         axios.post(`${ authAPIURL }register`,
             {
                 username: this.state.username,
                 email: this.state.email,
                 password: this.state.password,
                 confirm_password: this.state.confirmPassword
-            })
-            .then((response) => {
-                if (response.status === 201) {
-                    this.setState({
-                        isRegistered: true,
-                    })
-                }
-            })
-            .catch((error) => {
-                if (error.response) {
+        })
+        .then((response) => {
+            if (response.status === 201) {
+                this.setState({
+                    isRegistered: true,
+                })
+                toast.success('Your account has been created.')
+            }
+        })
+        .catch((error) => {
+            if (error.response) {
+                if (error.response.status === 400) {
                     let messages = error.response.data;
                     if (messages['username_message'] !== 'Valid') {
                         document.getElementById("usernameError").innerHTML = messages['username_message'];
@@ -65,10 +75,19 @@ class Register extends Component {
                     } else {
                         document.getElementById("confirmPasswordError").innerHTML = "";
                     }
-                } 
-            });
+                    document.getElementById("error").innerHTML = "";
+                } else {
+                    document.getElementById("error").innerHTML = error.response.data['message'];
+                    document.getElementById("usernameError").innerHTML = "";
+                    document.getElementById("emailError").innerHTML = "";
+                    document.getElementById("passwordError").innerHTML = "";
+                    document.getElementById("confirmPasswordError").innerHTML = "";
+                }
+            } 
+        });
     };
 
+    // Component rendering
     render() {
         if (this.state.isRegistered) {
             return <Redirect to="/login"/>
@@ -89,6 +108,7 @@ class Register extends Component {
                                 </div>
                                 <div className="panel-body">
                                     <form onSubmit={ this.onRegisterClick }>
+                                        <p id="error" className="error"></p>
                                         <div className="form-group">
                                             <input
                                                 className="form-control"
@@ -144,7 +164,7 @@ class Register extends Component {
                             </div>
                         </div>
                     </div>
-                    <Footer/>
+                    <FooterStatic/>
                 </div>
             </div>
         );
