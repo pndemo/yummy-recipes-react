@@ -60,30 +60,32 @@ class AddRecipe extends Component {
             })
         })
         .catch((error) => {
-            if (error.response.status === 400) {
-                let messages = error.response.data;
-                if (messages['recipe_name_message'] !== 'Valid') {
-                    document.getElementById("recipeNameError").innerHTML = messages['recipe_name_message'];
+            if (error.response){
+                if (error.response.status === 400) {
+                    let messages = error.response.data;
+                    if (messages['recipe_name_message'] !== 'Valid') {
+                        document.getElementById("recipeNameError").innerHTML = messages['recipe_name_message'];
+                    } else {
+                        document.getElementById("recipeNameError").innerHTML = "";
+                    }
+                    if (messages['ingredients_message'] !== 'Valid') {
+                        document.getElementById("ingredientsError").innerHTML = messages['ingredients_message'];
+                    } else {
+                        document.getElementById("ingredientsError").innerHTML = "";
+                    }
+                    if (messages['directions_message'] !== 'Valid') {
+                        document.getElementById("directionsError").innerHTML = messages['directions_message'];
+                    } else {
+                        document.getElementById("directionsError").innerHTML = "";
+                    }
+                    document.getElementById("error").innerHTML = "";
                 } else {
+                    document.getElementById("error").innerHTML = error.response.data['message'];
                     document.getElementById("recipeNameError").innerHTML = "";
-                }
-                if (messages['ingredients_message'] !== 'Valid') {
-                    document.getElementById("ingredientsError").innerHTML = messages['ingredients_message'];
-                } else {
                     document.getElementById("ingredientsError").innerHTML = "";
-                }
-                if (messages['directions_message'] !== 'Valid') {
-                    document.getElementById("directionsError").innerHTML = messages['directions_message'];
-                } else {
                     document.getElementById("directionsError").innerHTML = "";
-                }
-                document.getElementById("error").innerHTML = "";
-            } else {
-                document.getElementById("error").innerHTML = error.response.data['message'];
-                document.getElementById("recipeNameError").innerHTML = "";
-                document.getElementById("ingredientsError").innerHTML = "";
-                document.getElementById("directionsError").innerHTML = "";
-            }      
+                }  
+            }       
         });
     };
 

@@ -37,7 +37,9 @@ class DeleteRecipe extends Component {
             }
         })
         .catch((error) => {
-            document.getElementById("error").innerHTML = error.response.data['message'];
+            if (error.response){
+                document.getElementById("error").innerHTML = error.response.data['message'];
+            }
         });
     }
 
@@ -55,7 +57,9 @@ class DeleteRecipe extends Component {
             toast.success('Recipe has been deleted.')
         })
         .catch((error) => {
-            document.getElementById("error").innerHTML = error.response.data['message'];
+            if (error.response){
+                document.getElementById("error").innerHTML = error.response.data['message'];
+            }
         });
     };
 

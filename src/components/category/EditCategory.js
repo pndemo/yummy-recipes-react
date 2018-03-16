@@ -27,17 +27,21 @@ class EditCategory extends Component {
     
     // Get category details
     componentWillMount() {
-        privateAxiosInstance.get(`${ categoryAPIURL }${ this.props.match.params.category_id }`)
-        .then((response) => {
-          if (response.status === 200) {
-            this.setState({
-                categoryName: response.data['category_name'],
+        if ( this.props.match ) {
+            privateAxiosInstance.get(`${ categoryAPIURL }${ this.props.match.params.category_id }`)
+            .then((response) => {
+            if (response.status === 200) {
+                this.setState({
+                    categoryName: response.data['category_name'],
+                });  
+            }
+            })
+            .catch((error) => {
+                if (error.response){
+                    let message = error.response.data['message'];
+                }
             });
-          }
-        })
-        .catch((error) => {
-          let message = error.response.data['message'];
-        });
+        }   
     }
 
     // Reset state
@@ -69,11 +73,13 @@ class EditCategory extends Component {
             toast.success('Category has been updated.')
         })
         .catch((error) => {
-            if (error.response.status === 400) {
-                document.getElementById("error").innerHTML = error.response.data['category_name_message'];
-            } else {
-                document.getElementById("error").innerHTML = error.response.data['message'];
-            }
+            if (error.response){
+                if (error.response.status === 400) {
+                    document.getElementById("error").innerHTML = error.response.data['category_name_message'];
+                } else {
+                    document.getElementById("error").innerHTML = error.response.data['message'];
+                }
+            }   
         });
     };
 

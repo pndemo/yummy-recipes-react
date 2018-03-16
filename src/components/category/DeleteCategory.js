@@ -29,15 +29,17 @@ class DeleteCategory extends Component {
     componentWillMount() {
         privateAxiosInstance.get(`${ categoryAPIURL }${ this.props.match.params.category_id }`)
         .then((response) => {
-          if (response.status === 200) {
+        if (response.status === 200) {
             this.setState({
                 categoryName: response.data['category_name'],
             });
-          }
+        }
         })
         .catch((error) => {
-            document.getElementById("error").innerHTML = error.response.data['message'];
-        });
+            if (error.response){
+                document.getElementById("error").innerHTML = error.response.data['message'];
+            }
+        });  
     }
 
     // Handle delete category
@@ -51,7 +53,9 @@ class DeleteCategory extends Component {
             toast.success('Category has been deleted.')
         })
         .catch((error) => {
-            document.getElementById("error").innerHTML = error.response.data['message'];
+            if (error.response){
+                document.getElementById("error").innerHTML = error.response.data['message'];
+            }
         });
     };
 

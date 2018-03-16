@@ -54,11 +54,13 @@ class AddCategory extends Component {
             toast.success('Category has been added.')
         })
         .catch((error) => {
-            if (error.response.status === 400) {
-                document.getElementById("error").innerHTML = error.response.data['category_name_message'];
-            } else {
-                document.getElementById("error").innerHTML = error.response.data['message'];
-            }
+            if (error.response) {
+                if (error.response.status === 400) {
+                    document.getElementById("error").innerHTML = error.response.data['category_name_message'];
+                } else {
+                    document.getElementById("error").innerHTML = error.response.data['message'];
+                }
+            } 
         });
     };
 
@@ -91,7 +93,7 @@ class AddCategory extends Component {
                                         placeholder="Category name"/>
                                 </div>
                                 <div className="form-group">
-                                    <button type="submit" className="btn btn-primary btn-block App-btn-add">ADD</button>
+                                    <button type="submit" id="addCategory" className="btn btn-primary btn-block App-btn-add">ADD</button>
                                 </div>
                             </form>
                         </div>

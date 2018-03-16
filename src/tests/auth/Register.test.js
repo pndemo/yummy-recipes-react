@@ -15,12 +15,6 @@ const mock = new MockAdapter(axios);
 // Mock register POST request
 mock.onPost(`${authAPIURL}register`).reply(201, { message: 'Your account has been created.' });
 
-// Local storage
-global.localStorage = {
-  getItem: () => {},
-  setItem: () => {},
-};
-
 // Component Register
 describe('Component: Register', () => {
   configure({ adapter: new Adapter() });

@@ -15,12 +15,6 @@ const mock = new MockAdapter(axios);
 // Mock login POST request to /login
 mock.onPost(`${authAPIURL}login`).reply(201, { message: 'You are now logged in.' });
 
-// Local storage
-global.localStorage = {
-  getItem: () => {},
-  setItem: () => {},
-};
-
 // Component Login
 describe('Component: Login', () => {
   configure({ adapter: new Adapter() });
