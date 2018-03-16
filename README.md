@@ -5,6 +5,9 @@
 <a href="https://coveralls.io/github/pndemo/yummy-recipes-react">
 <img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes-react/badge.svg?branch=develop" alt="Badge"/>
 </a>
+<a href="https://github.com/pndemo/yummy-recipes-api/blob/develop/License.md">
+<img class="notice-badge" src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="Badge"/>
+</a>
 <br/>
 <h2>About Yummy Recipes App</h2>
 This app enables you to access Yummy Recipes resources, a platform for users to keep track of their awesome recipes and share with others if they so wish. The App functionalities include: creation of new user accounts, user login, password reset, creation of new recipe categories, viewing of recipe categories, updating of recipe categories, deletion of recipe categories, creation of new recipes, viewing of recipes, updating of recipes and deletion of recipes.
