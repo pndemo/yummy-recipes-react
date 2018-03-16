@@ -1,0 +1,140 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: DeleteCategory Display DeleteCategory component 1`] = `
+<div
+  className="App-light"
+>
+  <nav
+    className="navbar navbar-default"
+  >
+    <div
+      className="container"
+    >
+      <div
+        className="navbar-header"
+      >
+        <button
+          aria-expanded="false"
+          className="navbar-toggle collapsed nav-button"
+          data-target="#navigationbar"
+          data-toggle="collapse"
+          type="button"
+        >
+          <span
+            className="sr-only"
+          >
+            Toggle navigation
+          </span>
+          <span
+            className="icon-bar"
+          />
+          <span
+            className="icon-bar"
+          />
+          <span
+            className="icon-bar"
+          />
+        </button>
+        <a
+          className="App-title-navbar navbar-brand"
+          href="/"
+        >
+          <span
+            className="glyphicon glyphicon-fire"
+          />
+           Yummy Recipes
+        </a>
+      </div>
+      <div
+        className="collapse navbar-collapse"
+        id="navigationbar"
+      >
+        <ul
+          className="nav navbar-nav navbar-right"
+        >
+          <li>
+            <a
+              href="/change_password"
+            >
+              <span
+                className="glyphicon glyphicon-user"
+              />
+               Change Password
+            </a>
+          </li>
+          <li>
+            <a
+              href="/logout"
+            >
+              <span
+                className="glyphicon glyphicon-log-out"
+              />
+               Sign out
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div
+    className="container"
+  >
+    <div
+      className="row"
+    >
+      <div
+        className="col-xs-12"
+      >
+        <h1
+          className="App-page-title"
+        >
+          Delete Category
+        </h1>
+      </div>
+    </div>
+    <div
+      className="row"
+    >
+      <div
+        className="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3"
+      >
+        <p>
+          Do you want to delete category
+          <strong>
+             
+            
+          </strong>
+          ?
+        </p>
+        <form
+          onSubmit={[Function]}
+        >
+          <p
+            className="error"
+            id="error"
+          />
+          <div
+            className="form-group"
+          >
+            <button
+              className="btn btn-primary btn-block App-btn-add"
+              type="submit"
+            >
+              Delete
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <footer
+    className="App-footer-flex"
+  >
+    <p
+      className="App-copyright"
+    >
+      © 2018 Yummy Recipes LLC
+    </p>
+  </footer>
+</div>
+`;
