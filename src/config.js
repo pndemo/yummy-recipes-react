@@ -5,7 +5,7 @@
 import axios from 'axios';
 
 // API URLs
-export const baseAPIURL = 'http://yummy-recipes-apis.herokuapp.com';
+export const baseAPIURL = 'https://yummy-recipes-apis.herokuapp.com';
 export const authAPIURL = baseAPIURL.concat('/api/v1/auth/');
 export const categoryAPIURL = baseAPIURL.concat('/api/v1/category/');
 export const recipeAPIURL = baseAPIURL.concat('/api/v1/recipe/');
