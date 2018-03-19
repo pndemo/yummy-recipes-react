@@ -1,9 +1,9 @@
 <h1>Yummy Recipes App</h1>
 <a href="https://travis-ci.org/pndemo/yummy-recipes-react">
-<img class="notice-badge" src="https://travis-ci.org/pndemo/yummy-recipes-react.svg?branch=develop" alt="Badge"/>
+<img class="notice-badge" src="https://travis-ci.org/pndemo/yummy-recipes-react.svg?branch=master" alt="Badge"/>
 </a>
 <a href="https://coveralls.io/github/pndemo/yummy-recipes-react">
-<img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes-react/badge.svg?branch=develop" alt="Badge"/>
+<img class="notice-badge" src="https://coveralls.io/repos/github/pndemo/yummy-recipes-react/badge.svg?branch=master" alt="Badge"/>
 </a>
 <a href="https://github.com/pndemo/yummy-recipes-api/blob/develop/License.md">
 <img class="notice-badge" src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="Badge"/>
