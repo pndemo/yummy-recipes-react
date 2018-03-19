@@ -210,9 +210,23 @@ a:hover {
   color: #ff6666;
   font-weight: bold;
   text-shadow: 0 0 0;
+  margin-bottom: 1em;
 }
 .App-btn-add:hover {
   background-color: #ffe5e5;
   border: 1px solid #ff1919;
   color: #ff1919;
+}
+
+.App-btn-cancel {
+  background-color: #ffe5e5;
+  border: 1px solid silver;
+  color: silver;
+  text-shadow: 0 0 0;
+  margin-bottom: 1em;
+}
+.App-btn-cancel:hover {
+  background-color: #ffe5e5;
+  border: 1px solid #999999;
+  color: #999999;
 }

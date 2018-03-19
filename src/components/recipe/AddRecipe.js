@@ -9,9 +9,6 @@ import { recipeAPIURL } from '../../config';
 import privateAxiosInstance from '../../config';
 import Header from '../common/Header';
 import FooterFlex from '../common/FooterFlex';
-import axios from 'axios'
-import Time from 'react-time-format'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -25,6 +22,10 @@ class AddRecipe extends Component {
             recipeName: '',
             ingredients: '',
             directions: '',
+            recipeNameError: '',
+            ingredientsError: '',
+            directionsError: '',
+            error: '',
         };
     }
 
@@ -34,6 +35,16 @@ class AddRecipe extends Component {
             recipeName: '',
             ingredients: '',
             directions: '',
+        });
+    };
+
+    // Reset error state
+    resetErrorState = () => {
+        this.setState({
+            recipeNameError: '',
+            ingredientsError: '',
+            directionsError: '',
+            error: '',
         });
     };
 
@@ -54,38 +65,32 @@ class AddRecipe extends Component {
                 directions: this.state.directions,
         })
         .then((response) => {
-            this.resetState()
-            this.setState({
-                isAdded: true,
-            })
+            this.resetState();
+            if (response.status === 201) {
+                this.setState({
+                    isAdded: true,
+                })
+            }
         })
-        .catch((error) => {
-            if (error.response){
+        .catch((error) => {   
+            if (error.response) {
+                this.resetErrorState();
                 if (error.response.status === 400) {
-                    let messages = error.response.data;
-                    if (messages['recipe_name_message'] !== 'Valid') {
-                        document.getElementById("recipeNameError").innerHTML = messages['recipe_name_message'];
-                    } else {
-                        document.getElementById("recipeNameError").innerHTML = "";
+                    if (error.response.data['recipe_name_message'] !== 'Valid') {
+                        this.setState({recipeNameError: error.response.data['recipe_name_message']});
                     }
-                    if (messages['ingredients_message'] !== 'Valid') {
-                        document.getElementById("ingredientsError").innerHTML = messages['ingredients_message'];
-                    } else {
-                        document.getElementById("ingredientsError").innerHTML = "";
+                    if (error.response.data['ingredients_message'] !== 'Valid') {
+                        this.setState({ingredientsError: error.response.data['ingredients_message']});
                     }
-                    if (messages['directions_message'] !== 'Valid') {
-                        document.getElementById("directionsError").innerHTML = messages['directions_message'];
-                    } else {
-                        document.getElementById("directionsError").innerHTML = "";
+                    if (error.response.data['directions_message'] !== 'Valid') {
+                        this.setState({directionsError: error.response.data['directions_message']});
                     }
-                    document.getElementById("error").innerHTML = "";
-                } else {
-                    document.getElementById("error").innerHTML = error.response.data['message'];
-                    document.getElementById("recipeNameError").innerHTML = "";
-                    document.getElementById("ingredientsError").innerHTML = "";
-                    document.getElementById("directionsError").innerHTML = "";
-                }  
-            }       
+                } else if (error.response.status === 404 || error.response.status === 500) {
+                    this.setState({error: error.response.data['message']});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
+                }
+            }      
         });
     };
 
@@ -106,7 +111,7 @@ class AddRecipe extends Component {
                     <div className="row">
                         <div className="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
                             <form onSubmit={ this.addRecipeHandler }>
-                                <p id="error" className="error"></p>
+                                <p className="error">{ this.state.error }</p>
                                 <div className="form-group">
                                     <input
                                         className="form-control"
@@ -116,7 +121,7 @@ class AddRecipe extends Component {
                                         onChange={ this.onInputChanged }
                                         maxLength="100"
                                         placeholder="Recipe name"/>
-                                    <p id="recipeNameError" className="text-left error"></p>
+                                    <p className="text-left error">{ this.state.recipeNameError }</p>
                                 </div>
                                 <div className="form-group">
                                     <textarea
@@ -128,7 +133,7 @@ class AddRecipe extends Component {
                                         rows="5"
                                         maxLength="800"
                                         placeholder="Ingredients"/>
-                                    <p id="ingredientsError" className="text-left error"></p>
+                                    <p className="text-left error">{ this.state.ingredientsError }</p>
                                 </div>
                                 <div className="form-group">
                                     <textarea
@@ -140,10 +145,11 @@ class AddRecipe extends Component {
                                         rows="8"
                                         maxLength="2000"
                                         placeholder="Directions"/>
-                                    <p id="directionsError" className="text-left error"></p>
+                                    <p className="text-left error">{ this.state.directionsError }</p>
                                 </div>
                                 <div className="form-group">
                                     <button type="submit" className="btn btn-primary btn-block App-btn-add">ADD</button>
+                                    <a className="btn btn-primary btn-block App-btn-cancel" href={ '/recipes/'+this.props.match.params.category_id } role="button">CANCEL</a>
                                 </div>
                             </form>
                         </div>

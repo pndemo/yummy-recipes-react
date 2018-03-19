@@ -103,8 +103,9 @@ exports[`Component: EditCategory Display EditCategory component 1`] = `
         >
           <p
             className="error"
-            id="error"
-          />
+          >
+            
+          </p>
           <div
             className="form-group"
           >
@@ -127,6 +128,13 @@ exports[`Component: EditCategory Display EditCategory component 1`] = `
             >
               EDIT
             </button>
+            <a
+              className="btn btn-primary btn-block App-btn-cancel"
+              href="/"
+              role="button"
+            >
+              CANCEL
+            </a>
           </div>
         </form>
       </div>

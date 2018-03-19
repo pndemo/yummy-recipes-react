@@ -9,9 +9,6 @@ import { recipeAPIURL } from '../../config';
 import privateAxiosInstance from '../../config';
 import Header from '../common/Header';
 import FooterFlex from '../common/FooterFlex';
-import axios from 'axios'
-import Time from 'react-time-format'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -23,8 +20,16 @@ class DeleteRecipe extends Component {
         this.state = {
             isDeleted: false,
             recipeName: '',
+            error: '',
         };
     }
+
+    // Reset error state
+    resetErrorState = () => {
+        this.setState({
+            error: '',
+        });
+    };
 
     // Get recipe details
     componentWillMount() {
@@ -37,9 +42,14 @@ class DeleteRecipe extends Component {
             }
         })
         .catch((error) => {
-            if (error.response){
-                document.getElementById("error").innerHTML = error.response.data['message'];
-            }
+            if (error.response) {
+                this.resetErrorState();
+                if (error.response.status === 404 || error.response.status === 500) {
+                    this.setState({error: error.response.data['message']});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
+                }
+            } 
         });
     }
 
@@ -51,15 +61,21 @@ class DeleteRecipe extends Component {
             recipe_name: this.state.recipeName,
         })
         .then((response) => {
-            this.setState({
-                isDeleted: true,
-            })
-            toast.success('Recipe has been deleted.')
+            if (response.status === 200) {
+                this.setState({
+                    isDeleted: true,
+                })
+            }
         })
         .catch((error) => {
-            if (error.response){
-                document.getElementById("error").innerHTML = error.response.data['message'];
-            }
+            if (error.response) {
+                this.resetErrorState();
+                if (error.response.status === 404 || error.response.status === 500) {
+                    this.setState({error: error.response.data['message']});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
+                }
+            } 
         });
     };
 
@@ -86,6 +102,7 @@ class DeleteRecipe extends Component {
                                 <p id="error" className="error"></p>
                                 <div className="form-group">
                                     <button type="submit" className="btn btn-primary btn-block App-btn-add">Delete</button>
+                                    <a className="btn btn-primary btn-block App-btn-cancel" href={ '/recipes/'+this.props.match.params.category_id } role="button">CANCEL</a>
                                 </div>
                             </form>
                         </div>

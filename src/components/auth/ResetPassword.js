@@ -8,7 +8,6 @@ import { Redirect } from 'react-router-dom';
 import { authAPIURL } from '../../config';
 import FooterStatic from '../common/FooterStatic';
 import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -20,8 +19,16 @@ class ResetPassword extends Component {
         this.state = {
             isReset: false,
             email: '',
+            error: '',
         };
     }
+
+    // Reset error state
+    resetErrorState = () => {
+        this.setState({
+            error: '',
+        });
+    };
 
     // When input changes
     onInputChanged = (event) => {
@@ -42,14 +49,14 @@ class ResetPassword extends Component {
                 this.setState({
                     isReset: true,
                 })
-                toast.success('Your password has been reset.')
             }
         })
         .catch((error) => {
+            this.resetErrorState();
             if (error.response.status === 400) {
-                document.getElementById("error").innerHTML = error.response.data['email_message'];
-            } else {
-                document.getElementById("error").innerHTML = error.response.data['message'];
+                this.setState({error: error.response.data['email_message']});
+            } else if (error.response.status === 500) {
+                this.setState({error: error.response.data['message']});
             }
         });
     };
@@ -75,7 +82,7 @@ class ResetPassword extends Component {
                                 </div>
                                 <div className="panel-body">
                                     <form onSubmit={ this.onResetClick }>
-                                        <p id="error" className="error"></p>
+                                        <p id="error" className="error">{ this.state.error }</p>
                                         <div className="form-group">
                                             <input
                                                 className="form-control"
@@ -85,7 +92,6 @@ class ResetPassword extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Email address"/>
-                                                <p id="emailError" className="text-left error"></p>
                                         </div>
                                         <div className="form-group">
                                             <button type="submit" className="btn btn-primary btn-block">Submit</button>

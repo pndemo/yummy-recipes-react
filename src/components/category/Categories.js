@@ -4,11 +4,9 @@
 */
 
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { baseAPIURL } from '../../config';
 import { categoryAPIURL } from '../../config';
 import privateAxiosInstance from '../../config';
-import axios from 'axios'
 import Time from 'react-time-format'
 
 // Application styling
@@ -22,9 +20,19 @@ class Categories extends Component {
       categories: [],
       previousLink: '',
       nextLink: '',
+      page: '',
+      pages: '',
       q: '',
+      error: '',
     };
   }
+
+  // Reset error state
+  resetErrorState = () => {
+    this.setState({
+        error: '',
+    });
+  };
 
   // Get recipe categories
   componentWillMount() {
@@ -35,11 +43,20 @@ class Categories extends Component {
           categories: response.data['results'],
           previousLink: response.data['previous_link'],
           nextLink: response.data['next_link'],
+          page: response.data['page'],
+          pages: response.data['pages'],
         });
       }
     })
     .catch((error) => {
-      document.getElementById("error").innerHTML = error.response.data['message'];
+      if (error.response) {
+        this.resetErrorState();
+        if (error.response.status === 400 || error.response.status === 500) {
+          this.setState({error: error.response.data['message']});
+        } else if (error.response.status === 401) {
+          return window.location.href = '/login';
+        }
+      }
     });
   }
 
@@ -59,10 +76,17 @@ class Categories extends Component {
           categories: response.data['results'],
           previousLink: response.data['previous_link'],
           nextLink: response.data['next_link'],
+          page: response.data['page'],
+          pages: response.data['pages'],
         })
     })
     .catch((error) => {
-      document.getElementById("error").innerHTML = error.response.data['message'];
+      this.resetErrorState();
+      if (error.response.status === 400 || error.response.status === 500) {
+        this.setState({error: error.response.data['message']});
+      } else if (error.response.status === 401) {
+        return window.location.href = '/login';
+      }
     });
   };
 
@@ -75,10 +99,17 @@ class Categories extends Component {
           categories: response.data['results'],
           previousLink: response.data['previous_link'],
           nextLink: response.data['next_link'],
+          page: response.data['page'],
+          pages: response.data['pages'],
         })
     })
     .catch((error) => {
-      document.getElementById("error").innerHTML = error.response.data['message'];
+      this.resetErrorState();
+      if (error.response.status === 400 || error.response.status === 500) {
+        this.setState({error: error.response.data['message']});
+      } else if (error.response.status === 401) {
+        return window.location.href = '/login';
+      }
     });
   };
 
@@ -91,10 +122,17 @@ class Categories extends Component {
           categories: response.data['results'],
           previousLink: response.data['previous_link'],
           nextLink: response.data['next_link'],
+          page: response.data['page'],
+          pages: response.data['pages'],
         })
     })
     .catch((error) => {
-      document.getElementById("error").innerHTML = error.response.data['message'];
+      this.resetErrorState();
+      if (error.response.status === 400 || error.response.status === 500) {
+        this.setState({error: error.response.data['message']});
+      } else if (error.response.status === 401) {
+        return window.location.href = '/login';
+      }
     });
   };
 
@@ -107,7 +145,7 @@ class Categories extends Component {
             <h1 className="App-page-title">Recipe Categories</h1>
           </div>
         </div>
-        <p id="error" className="error"></p>
+        <p className="error">{ this.state.error }</p>
         <form onSubmit={ this.searchHandler }>
           <div className="row">
             <div className="col-xs-12 col-md-4">
@@ -165,7 +203,7 @@ class Categories extends Component {
         }
         </div>
         <div className="row">
-          <div className="col-xs-6 text-left">
+          <div className="col-xs-4 text-left">
             { this.state.previousLink !== '' ? (
               <form onSubmit={ this.getPreviousPage }>
                 <button type="submit" className="btn btn-default search-button">
@@ -176,7 +214,10 @@ class Categories extends Component {
               <form/>
             )}
           </div>
-          <div className="col-xs-6 text-right">
+          <div className="col-xs-4 text-center">
+            <p>Page { this.state.page } of { this.state.pages }</p>
+          </div>
+          <div className="col-xs-4 text-right">
             { this.state.nextLink !== '' ? (
               <form onSubmit={ this.getNextPage }>
                 <button type="submit" className="btn btn-default search-button">

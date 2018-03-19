@@ -8,7 +8,6 @@ import { Redirect } from 'react-router-dom';
 import { authAPIURL } from '../../config';
 import FooterStatic from '../common/FooterStatic';
 import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -20,11 +19,27 @@ class Register extends Component {
         this.state = {
             isRegistered: false,
             username: '',
+            usernameError: '',
             email: '',
+            emailError: '',
             password: '',
+            passwordError: '',
             confirmPassword: '',
+            confirmPasswordError: '',
+            error: '',
         };
     }
+
+    // Reset error state
+    resetErrorState = () => {
+        this.setState({
+            usernameError: '',
+            emailError: '',
+            passwordError: '',
+            confirmPasswordError: '',
+            error: '',
+        });
+    };
 
     // When input changes
     onInputChanged = (event) => {
@@ -48,40 +63,26 @@ class Register extends Component {
                 this.setState({
                     isRegistered: true,
                 })
-                toast.success('Your account has been created.')
             }
         })
         .catch((error) => {
             if (error.response) {
+                this.resetErrorState();
                 if (error.response.status === 400) {
-                    let messages = error.response.data;
-                    if (messages['username_message'] !== 'Valid') {
-                        document.getElementById("usernameError").innerHTML = messages['username_message'];
-                    } else {
-                        document.getElementById("usernameError").innerHTML = "";
+                    if (error.response.data['username_message'] !== 'Valid') {
+                        this.setState({usernameError: error.response.data['username_message']});
                     }
-                    if (messages['email_message'] !== 'Valid') {
-                        document.getElementById("emailError").innerHTML = messages['email_message'];
-                    } else {
-                        document.getElementById("emailError").innerHTML = "";
+                    if (error.response.data['email_message'] !== 'Valid') {
+                        this.setState({emailError: error.response.data['email_message']});
                     }
-                    if (messages['password_message'] !== 'Valid') {
-                        document.getElementById("passwordError").innerHTML = messages['password_message'];
-                    } else {
-                        document.getElementById("passwordError").innerHTML = "";
+                    if (error.response.data['password_message'] !== 'Valid') {
+                        this.setState({passwordError: error.response.data['password_message']});
                     }
-                    if (messages['confirm_password_message'] !== 'Valid') {
-                        document.getElementById("confirmPasswordError").innerHTML = messages['confirm_password_message'];
-                    } else {
-                        document.getElementById("confirmPasswordError").innerHTML = "";
+                    if (error.response.data['confirm_password_message'] !== 'Valid') {
+                        this.setState({confirmPasswordError: error.response.data['confirm_password_message']});
                     }
-                    document.getElementById("error").innerHTML = "";
-                } else {
-                    document.getElementById("error").innerHTML = error.response.data['message'];
-                    document.getElementById("usernameError").innerHTML = "";
-                    document.getElementById("emailError").innerHTML = "";
-                    document.getElementById("passwordError").innerHTML = "";
-                    document.getElementById("confirmPasswordError").innerHTML = "";
+                } else if (error.response.status === 500) {
+                    this.setState({error: error.response.data['message']});
                 }
             } 
         });
@@ -108,7 +109,7 @@ class Register extends Component {
                                 </div>
                                 <div className="panel-body">
                                     <form onSubmit={ this.onRegisterClick }>
-                                        <p id="error" className="error"></p>
+                                        <p className="error">{ this.state.error }</p>
                                         <div className="form-group">
                                             <input
                                                 className="form-control"
@@ -118,7 +119,7 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="80"
                                                 placeholder="Username"/>
-                                                <p id="usernameError" className="text-left error"></p>
+                                                <p className="text-left error">{ this.state.usernameError }</p>
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -129,7 +130,7 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Email address"/>
-                                                <p id="emailError" className="text-left error"></p>
+                                                <p className="text-left error">{ this.state.emailError }</p>
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -140,7 +141,7 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Password"/>
-                                                <p id="passwordError" className="text-left error"></p>
+                                                <p className="text-left error">{ this.state.passwordError }</p>
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -151,7 +152,7 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Confirm password"/>
-                                                <p id="confirmPasswordError" className="text-left error"></p>
+                                                <p className="text-left error">{ this.state.confirmPasswordError }</p>
                                         </div>
                                         <div className="form-group">
                                             <button type="submit" className="btn btn-primary btn-block">Register</button>

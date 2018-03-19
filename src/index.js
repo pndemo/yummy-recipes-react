@@ -16,7 +16,6 @@ import Recipe from './components/recipe/Recipes';
 import AddRecipe from './components/recipe/AddRecipe';
 import EditRecipe from './components/recipe/EditRecipe';
 import DeleteRecipe from './components/recipe/DeleteRecipe';
-import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(<BrowserRouter>
   <div>
@@ -35,5 +34,3 @@ ReactDOM.render(<BrowserRouter>
     <PrivateRoute path="/logout" component={Logout} />
   </div>
 </BrowserRouter>, document.getElementById('root'));
-
-registerServiceWorker();
