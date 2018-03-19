@@ -22,9 +22,6 @@ class AddRecipe extends Component {
             recipeName: '',
             ingredients: '',
             directions: '',
-            recipeNameError: '',
-            ingredientsError: '',
-            directionsError: '',
             error: '',
         };
     }
@@ -35,16 +32,6 @@ class AddRecipe extends Component {
             recipeName: '',
             ingredients: '',
             directions: '',
-        });
-    };
-
-    // Reset error state
-    resetErrorState = () => {
-        this.setState({
-            recipeNameError: '',
-            ingredientsError: '',
-            directionsError: '',
-            error: '',
         });
     };
 
@@ -74,23 +61,12 @@ class AddRecipe extends Component {
         })
         .catch((error) => {   
             if (error.response) {
-                this.resetErrorState();
-                if (error.response.status === 400) {
-                    if (error.response.data['recipe_name_message'] !== 'Valid') {
-                        this.setState({recipeNameError: error.response.data['recipe_name_message']});
-                    }
-                    if (error.response.data['ingredients_message'] !== 'Valid') {
-                        this.setState({ingredientsError: error.response.data['ingredients_message']});
-                    }
-                    if (error.response.data['directions_message'] !== 'Valid') {
-                        this.setState({directionsError: error.response.data['directions_message']});
-                    }
-                } else if (error.response.status === 404 || error.response.status === 500) {
-                    this.setState({error: error.response.data['message']});
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
                 } else if (error.response.status === 401) {
                     return window.location.href = '/login';
                 }
-            }      
+            }     
         });
     };
 
@@ -111,7 +87,9 @@ class AddRecipe extends Component {
                     <div className="row">
                         <div className="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
                             <form onSubmit={ this.addRecipeHandler }>
-                                <p className="error">{ this.state.error }</p>
+                                { this.state.error['message'] !== 'Valid' ? (
+                                <p className="error">{ this.state.error['message'] }</p>
+                                ): (<p/>)}
                                 <div className="form-group">
                                     <input
                                         className="form-control"
@@ -121,7 +99,9 @@ class AddRecipe extends Component {
                                         onChange={ this.onInputChanged }
                                         maxLength="100"
                                         placeholder="Recipe name"/>
-                                    <p className="text-left error">{ this.state.recipeNameError }</p>
+                                    { this.state.error['recipe_name_message'] !== 'Valid' ? (
+                                    <p className="text-left error">{ this.state.error['recipe_name_message'] }</p>
+                                    ): (<p/>)}
                                 </div>
                                 <div className="form-group">
                                     <textarea
@@ -133,7 +113,9 @@ class AddRecipe extends Component {
                                         rows="5"
                                         maxLength="800"
                                         placeholder="Ingredients"/>
-                                    <p className="text-left error">{ this.state.ingredientsError }</p>
+                                    { this.state.error['ingredients_message'] !== 'Valid' ? (
+                                    <p className="text-left error">{ this.state.error['ingredients_message'] }</p>
+                                    ): (<p/>)}
                                 </div>
                                 <div className="form-group">
                                     <textarea
@@ -145,7 +127,9 @@ class AddRecipe extends Component {
                                         rows="8"
                                         maxLength="2000"
                                         placeholder="Directions"/>
-                                    <p className="text-left error">{ this.state.directionsError }</p>
+                                    { this.state.error['directions_message'] !== 'Valid' ? (
+                                    <p className="text-left error">{ this.state.error['directions_message'] }</p>
+                                    ): (<p/>)}
                                 </div>
                                 <div className="form-group">
                                     <button type="submit" className="btn btn-primary btn-block App-btn-add">ADD</button>

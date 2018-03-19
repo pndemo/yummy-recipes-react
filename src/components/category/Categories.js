@@ -27,13 +27,6 @@ class Categories extends Component {
     };
   }
 
-  // Reset error state
-  resetErrorState = () => {
-    this.setState({
-        error: '',
-    });
-  };
-
   // Get recipe categories
   componentWillMount() {
     privateAxiosInstance.get(`${ categoryAPIURL }`)
@@ -50,9 +43,8 @@ class Categories extends Component {
     })
     .catch((error) => {
       if (error.response) {
-        this.resetErrorState();
         if (error.response.status === 400 || error.response.status === 500) {
-          this.setState({error: error.response.data['message']});
+          this.setState({error: error.response.data});
         } else if (error.response.status === 401) {
           return window.location.href = '/login';
         }
@@ -81,11 +73,12 @@ class Categories extends Component {
         })
     })
     .catch((error) => {
-      this.resetErrorState();
-      if (error.response.status === 400 || error.response.status === 500) {
-        this.setState({error: error.response.data['message']});
-      } else if (error.response.status === 401) {
-        return window.location.href = '/login';
+      if (error.response) {
+        if (error.response.status === 400 || error.response.status === 500) {
+          this.setState({error: error.response.data});
+        } else if (error.response.status === 401) {
+          return window.location.href = '/login';
+        }
       }
     });
   };
@@ -104,11 +97,12 @@ class Categories extends Component {
         })
     })
     .catch((error) => {
-      this.resetErrorState();
-      if (error.response.status === 400 || error.response.status === 500) {
-        this.setState({error: error.response.data['message']});
-      } else if (error.response.status === 401) {
-        return window.location.href = '/login';
+      if (error.response) {
+        if (error.response.status === 400 || error.response.status === 500) {
+          this.setState({error: error.response.data});
+        } else if (error.response.status === 401) {
+          return window.location.href = '/login';
+        }
       }
     });
   };
@@ -128,10 +122,12 @@ class Categories extends Component {
     })
     .catch((error) => {
       this.resetErrorState();
-      if (error.response.status === 400 || error.response.status === 500) {
-        this.setState({error: error.response.data['message']});
-      } else if (error.response.status === 401) {
-        return window.location.href = '/login';
+      if (error.response) {
+        if (error.response.status === 400 || error.response.status === 500) {
+          this.setState({error: error.response.data});
+        } else if (error.response.status === 401) {
+          return window.location.href = '/login';
+        }
       }
     });
   };
@@ -145,7 +141,9 @@ class Categories extends Component {
             <h1 className="App-page-title">Recipe Categories</h1>
           </div>
         </div>
-        <p className="error">{ this.state.error }</p>
+        { this.state.error['message'] !== 'Valid' ? (
+        <p className="error">{ this.state.error['message'] }</p>
+        ): (<p/>)}
         <form onSubmit={ this.searchHandler }>
           <div className="row">
             <div className="col-xs-12 col-md-4">

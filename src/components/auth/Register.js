@@ -21,25 +21,9 @@ class Register extends Component {
             username: '',
             usernameError: '',
             email: '',
-            emailError: '',
-            password: '',
-            passwordError: '',
-            confirmPassword: '',
-            confirmPasswordError: '',
             error: '',
         };
     }
-
-    // Reset error state
-    resetErrorState = () => {
-        this.setState({
-            usernameError: '',
-            emailError: '',
-            passwordError: '',
-            confirmPasswordError: '',
-            error: '',
-        });
-    };
 
     // When input changes
     onInputChanged = (event) => {
@@ -66,25 +50,7 @@ class Register extends Component {
             }
         })
         .catch((error) => {
-            if (error.response) {
-                this.resetErrorState();
-                if (error.response.status === 400) {
-                    if (error.response.data['username_message'] !== 'Valid') {
-                        this.setState({usernameError: error.response.data['username_message']});
-                    }
-                    if (error.response.data['email_message'] !== 'Valid') {
-                        this.setState({emailError: error.response.data['email_message']});
-                    }
-                    if (error.response.data['password_message'] !== 'Valid') {
-                        this.setState({passwordError: error.response.data['password_message']});
-                    }
-                    if (error.response.data['confirm_password_message'] !== 'Valid') {
-                        this.setState({confirmPasswordError: error.response.data['confirm_password_message']});
-                    }
-                } else if (error.response.status === 500) {
-                    this.setState({error: error.response.data['message']});
-                }
-            } 
+            this.setState({error: error.response.data});
         });
     };
 
@@ -109,7 +75,9 @@ class Register extends Component {
                                 </div>
                                 <div className="panel-body">
                                     <form onSubmit={ this.onRegisterClick }>
-                                        <p className="error">{ this.state.error }</p>
+                                        { this.state.error['message'] !== 'Valid' ? (
+                                        <p className="error">{ this.state.error['message'] }</p>
+                                        ): (<p/>)}
                                         <div className="form-group">
                                             <input
                                                 className="form-control"
@@ -119,7 +87,9 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="80"
                                                 placeholder="Username"/>
-                                                <p className="text-left error">{ this.state.usernameError }</p>
+                                                { this.state.error['username_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['username_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -130,7 +100,9 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Email address"/>
-                                                <p className="text-left error">{ this.state.emailError }</p>
+                                                { this.state.error['email_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['email_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -141,7 +113,9 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Password"/>
-                                                <p className="text-left error">{ this.state.passwordError }</p>
+                                                { this.state.error['password_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['password_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -152,7 +126,9 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Confirm password"/>
-                                                <p className="text-left error">{ this.state.confirmPasswordError }</p>
+                                                { this.state.error['confirm_password_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['confirm_password_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <button type="submit" className="btn btn-primary btn-block">Register</button>

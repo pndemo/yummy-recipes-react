@@ -24,13 +24,6 @@ class EditCategory extends Component {
         };
     }
 
-    // Reset error state
-    resetErrorState = () => {
-        this.setState({
-            error: '',
-        });
-    };
-
     // Get category details
     componentWillMount() {
         if ( this.props.match ) {
@@ -44,9 +37,8 @@ class EditCategory extends Component {
             })
             .catch((error) => {
                 if (error.response) {
-                    this.resetErrorState();
-                    if (error.response.status === 404 || error.response.status === 500) {
-                        this.setState({error: error.response.data['message']});
+                    if (error.response.status === 400 || error.response.status === 500) {
+                        this.setState({error: error.response.data});
                     } else if (error.response.status === 401) {
                         return window.location.href = '/login';
                     }
@@ -86,11 +78,8 @@ class EditCategory extends Component {
         })
         .catch((error) => {
             if (error.response) {
-                this.resetErrorState();
-                if (error.response.status === 400) {
-                    this.setState({error: error.response.data['category_name_message']});
-                } else if (error.response.status === 404 || error.response.status === 500) {
-                    this.setState({error: error.response.data['message']});
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
                 } else if (error.response.status === 401) {
                     return window.location.href = '/login';
                 }
@@ -115,7 +104,9 @@ class EditCategory extends Component {
                     <div className="row">
                         <div className="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
                             <form onSubmit={ this.editCategoryHandler }>
-                                <p className="error">{ this.state.error }</p>
+                                { this.state.error['message'] !== 'Valid' ? (
+                                <p className="error">{ this.state.error['message'] }</p>
+                                ): (<p/>)}
                                 <div className="form-group">
                                     <input
                                         className="form-control"
@@ -125,6 +116,9 @@ class EditCategory extends Component {
                                         onChange={ this.onInputChanged }
                                         maxLength="50"
                                         placeholder="Category name"/>
+                                        { this.state.error['category_name_message'] !== 'Valid' ? (
+                                        <p className="error">{ this.state.error['category_name_message'] }</p>
+                                        ): (<p/>)}
                                 </div>
                                 <div className="form-group">
                                     <button type="submit" className="btn btn-primary btn-block App-btn-add">EDIT</button>

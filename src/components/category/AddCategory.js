@@ -31,13 +31,6 @@ class AddCategory extends Component {
         });
     };
 
-    // Reset error state
-    resetErrorState = () => {
-        this.setState({
-            error: '',
-        });
-    };
-
     // When input changes
     onInputChanged = (event) => {
         this.setState({
@@ -62,11 +55,8 @@ class AddCategory extends Component {
         })
         .catch((error) => {
             if (error.response) {
-                this.resetErrorState();
-                if (error.response.status === 400) {
-                    this.setState({error: error.response.data['category_name_message']});
-                } else if (error.response.status === 500) {
-                    this.setState({error: error.response.data['message']});
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
                 } else if (error.response.status === 401) {
                     return window.location.href = '/login';
                 }
@@ -91,7 +81,9 @@ class AddCategory extends Component {
                     <div className="row">
                         <div className="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
                             <form onSubmit={ this.addCategoryHandler }>
-                                <p className="error">{ this.state.error }</p>
+                                { this.state.error['message'] !== 'Valid' ? (
+                                <p className="error">{ this.state.error['message'] }</p>
+                                ): (<p/>)}
                                 <div className="form-group">
                                     <input
                                         className="form-control"
@@ -101,6 +93,9 @@ class AddCategory extends Component {
                                         onChange={ this.onInputChanged }
                                         maxLength="50"
                                         placeholder="Category name"/>
+                                        { this.state.error['category_name_message'] !== 'Valid' ? (
+                                        <p className="error">{ this.state.error['category_name_message'] }</p>
+                                        ): (<p/>)}
                                 </div>
                                 <div className="form-group">
                                     <button type="submit" id="addCategory" className="btn btn-primary btn-block App-btn-add">ADD</button>

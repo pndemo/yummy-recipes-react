@@ -111,9 +111,7 @@ exports[`Component: DeleteCategory Display DeleteCategory component 1`] = `
         >
           <p
             className="error"
-          >
-            
-          </p>
+          />
           <div
             className="form-group"
           >

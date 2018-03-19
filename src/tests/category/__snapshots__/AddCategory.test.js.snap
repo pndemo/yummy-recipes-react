@@ -103,9 +103,7 @@ exports[`Component: AddCategory Display AddCategory component 1`] = `
         >
           <p
             className="error"
-          >
-            
-          </p>
+          />
           <div
             className="form-group"
           >
@@ -117,6 +115,9 @@ exports[`Component: AddCategory Display AddCategory component 1`] = `
               placeholder="Category name"
               type="text"
               value=""
+            />
+            <p
+              className="error"
             />
           </div>
           <div

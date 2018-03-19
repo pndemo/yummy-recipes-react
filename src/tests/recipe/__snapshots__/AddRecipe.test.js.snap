@@ -103,9 +103,7 @@ exports[`Component: AddRecipe Display AddRecipe component 1`] = `
         >
           <p
             className="error"
-          >
-            
-          </p>
+          />
           <div
             className="form-group"
           >
@@ -120,9 +118,7 @@ exports[`Component: AddRecipe Display AddRecipe component 1`] = `
             />
             <p
               className="text-left error"
-            >
-              
-            </p>
+            />
           </div>
           <div
             className="form-group"
@@ -139,9 +135,7 @@ exports[`Component: AddRecipe Display AddRecipe component 1`] = `
             />
             <p
               className="text-left error"
-            >
-              
-            </p>
+            />
           </div>
           <div
             className="form-group"
@@ -158,9 +152,7 @@ exports[`Component: AddRecipe Display AddRecipe component 1`] = `
             />
             <p
               className="text-left error"
-            >
-              
-            </p>
+            />
           </div>
           <div
             className="form-group"

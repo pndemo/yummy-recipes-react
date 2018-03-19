@@ -21,20 +21,9 @@ class ChangePassword extends Component {
             isChanged: false,
             newPassword: '',
             confirmNewPassword: '',
-            newPasswordError: '',
-            confirmNewPasswordError: '',
             error: '',
         };
     }
-
-    // Reset error state
-    resetErrorState = () => {
-        this.setState({
-            newPasswordError: '',
-            confirmNewPasswordError: '',
-            error: '',
-        });
-    };
 
     // When input changes
     onInputChanged = (event) => {
@@ -60,16 +49,8 @@ class ChangePassword extends Component {
         })
         .catch((error) => {
             if (error.response) {
-                this.resetErrorState();
-                if (error.response.status === 400) {
-                    if (error.response.data['new_password_message'] !== 'Valid') {
-                        this.setState({newPasswordError: error.response.data['new_password_message']});
-                    }
-                    if (error.response.data['confirm_new_password_message'] !== 'Valid') {
-                        this.setState({confirmNewPasswordError: error.response.data['confirm_new_password_message']});
-                    }
-                } else if (error.response.status === 500){
-                    this.setState({error: error.response.data['message']});
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
                 } else if (error.response.status === 401) {
                     return window.location.href = '/login';
                 }
@@ -94,7 +75,9 @@ class ChangePassword extends Component {
                     <div className="row">
                         <div className="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
                             <form onSubmit={ this.onPasswordChange }>
-                                <p className="error">{ this.state.error }</p>
+                                { this.state.error['message'] !== 'Valid' ? (
+                                <p className="error">{ this.state.error['message'] }</p>
+                                ): (<p/>)}
                                 <div className="form-group">
                                     <input
                                         className="form-control"
@@ -104,7 +87,9 @@ class ChangePassword extends Component {
                                         onChange={ this.onInputChanged }
                                         maxLength="100"
                                         placeholder="New password"/>
-                                        <p className="text-left error">{ this.state.newPasswordError }</p>
+                                        { this.state.error['new_password_message'] !== 'Valid' ? (
+                                        <p className="text-left error">{ this.state.error['new_password_message'] }</p>
+                                        ): (<p/>)}
                                 </div>
                                 <div className="form-group">
                                     <input
@@ -115,7 +100,9 @@ class ChangePassword extends Component {
                                         onChange={ this.onInputChanged }
                                         maxLength="100"
                                         placeholder="Confirm new password"/>
-                                        <p className="text-left error">{ this.state.confirmNewPasswordError }</p>
+                                        { this.state.error['confirm_new_password_message'] !== 'Valid' ? (
+                                        <p className="text-left error">{ this.state.error['confirm_new_password_message'] }</p>
+                                        ): (<p/>)}
                                 </div>
                                 <div className="form-group">
                                     <button type="submit" className="btn btn-primary btn-block App-btn-add">SUBMIT</button>

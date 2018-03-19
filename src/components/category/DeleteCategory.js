@@ -24,13 +24,6 @@ class DeleteCategory extends Component {
         };
     }
 
-    // Reset error state
-    resetErrorState = () => {
-        this.setState({
-            error: '',
-        });
-    };
-
     // Get category details
     componentWillMount() {
         privateAxiosInstance.get(`${ categoryAPIURL }${ this.props.match.params.category_id }`)
@@ -43,9 +36,8 @@ class DeleteCategory extends Component {
         })
         .catch((error) => {
             if (error.response) {
-                this.resetErrorState();
-                if (error.response.status === 404 || error.response.status === 500) {
-                    this.setState({error: error.response.data['message']});
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
                 } else if (error.response.status === 401) {
                     return window.location.href = '/login';
                 }
@@ -66,9 +58,8 @@ class DeleteCategory extends Component {
         })
         .catch((error) => {
             if (error.response) {
-                this.resetErrorState();
-                if (error.response.status === 404 || error.response.status === 500) {
-                    this.setState({error: error.response.data['message']});
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
                 } else if (error.response.status === 401) {
                     return window.location.href = '/login';
                 }
@@ -96,7 +87,9 @@ class DeleteCategory extends Component {
                                 <strong> { this.state.categoryName }</strong>?
                             </p>
                             <form onSubmit={ this.deleteCategoryHandler }>
-                                <p className="error">{ this.state.error }</p>
+                                { this.state.error['message'] !== 'Valid' ? (
+                                <p className="error">{ this.state.error['message'] }</p>
+                                ): (<p/>)}
                                 <div className="form-group">
                                     <button type="submit" className="btn btn-primary btn-block App-btn-add">Delete</button>
                                     <a className="btn btn-primary btn-block App-btn-cancel" href="/" role="button">CANCEL</a>

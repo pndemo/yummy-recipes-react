@@ -20,20 +20,9 @@ class Login extends Component {
             isLoggedIn: localStorage.getItem('token'),
             username: '',
             password: '',
-            usernameError: '',
-            passwordError: '',
             error: '',
         };
     }
-
-    // Reset error state
-    resetErrorState = () => {
-        this.setState({
-            usernameError: '',
-            passwordError: '',
-            error: '',
-        });
-    };
 
     // When input changes
     onInputChanged = (event) => {
@@ -54,28 +43,18 @@ class Login extends Component {
             if (response.status === 200) {
                 localStorage.setItem('token', response.data['access_token']);
                 this.setState({
-                    isLogged: true,
+                    isLoggedIn: true,
                 })
             }
         })
         .catch((error) => {
-            this.resetErrorState();
-            if (error.response.status === 400) {
-                if (error.response.data['username_message'] !== 'Valid') {
-                    this.setState({usernameError: error.response.data['username_message']});
-                }
-                if (error.response.data['password_message'] !== 'Valid') {
-                    this.setState({passwordError: error.response.data['password_message']});
-                }
-            } else if (error.response.status === 401 || error.response.status === 500) {
-                this.setState({error: error.response.data['message']});
-            }
+            this.setState({error: error.response.data});
         });
     };
 
     // Component rendering
     render() {
-        if (this.state.isLogged) {
+        if (this.state.isLoggedIn) {
             return <Redirect to="/"/>
         }
         return (
@@ -94,7 +73,9 @@ class Login extends Component {
                                 </div>
                                 <div className="panel-body">
                                     <form onSubmit={ this.onLoginClick }>
-                                        <p className="error">{ this.state.error }</p>
+                                        { this.state.error['message'] !== 'Valid' ? (
+                                        <p className="error">{ this.state.error['message'] }</p>
+                                        ): (<p/>)}
                                         <div className="form-group">
                                             <input
                                                 className="form-control"
@@ -104,7 +85,9 @@ class Login extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="50"
                                                 placeholder="Username"/>
-                                                <p className="text-left error">{ this.state.usernameError }</p>
+                                                { this.state.error['username_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['username_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -115,7 +98,9 @@ class Login extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="50"
                                                 placeholder="Password"/>
-                                                <p className="text-left error">{ this.state.passwordError }</p>
+                                                { this.state.error['password_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['password_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <button type="submit" className="btn btn-primary btn-block">Login</button>

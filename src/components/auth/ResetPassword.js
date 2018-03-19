@@ -23,13 +23,6 @@ class ResetPassword extends Component {
         };
     }
 
-    // Reset error state
-    resetErrorState = () => {
-        this.setState({
-            error: '',
-        });
-    };
-
     // When input changes
     onInputChanged = (event) => {
         this.setState({
@@ -52,12 +45,7 @@ class ResetPassword extends Component {
             }
         })
         .catch((error) => {
-            this.resetErrorState();
-            if (error.response.status === 400) {
-                this.setState({error: error.response.data['email_message']});
-            } else if (error.response.status === 500) {
-                this.setState({error: error.response.data['message']});
-            }
+            this.setState({error: error.response.data});
         });
     };
 
@@ -82,7 +70,9 @@ class ResetPassword extends Component {
                                 </div>
                                 <div className="panel-body">
                                     <form onSubmit={ this.onResetClick }>
-                                        <p id="error" className="error">{ this.state.error }</p>
+                                        { this.state.error['message'] !== 'Valid' ? (
+                                        <p className="error">{ this.state.error['message'] }</p>
+                                        ): (<p/>)}
                                         <div className="form-group">
                                             <input
                                                 className="form-control"
@@ -92,6 +82,9 @@ class ResetPassword extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Email address"/>
+                                                { this.state.error['email_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['email_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <button type="submit" className="btn btn-primary btn-block">Submit</button>
