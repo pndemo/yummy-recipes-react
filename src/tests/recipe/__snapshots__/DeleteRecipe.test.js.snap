@@ -111,7 +111,6 @@ exports[`Component: DeleteRecipe Display DeleteRecipe component 1`] = `
         >
           <p
             className="error"
-            id="error"
           />
           <div
             className="form-group"
@@ -122,6 +121,13 @@ exports[`Component: DeleteRecipe Display DeleteRecipe component 1`] = `
             >
               Delete
             </button>
+            <a
+              className="btn btn-primary btn-block App-btn-cancel"
+              href="/recipes/1"
+              role="button"
+            >
+              CANCEL
+            </a>
           </div>
         </form>
       </div>

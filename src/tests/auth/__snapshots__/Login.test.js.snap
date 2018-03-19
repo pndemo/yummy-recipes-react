@@ -41,7 +41,6 @@ exports[`Component: Login Display Login 1`] = `
             >
               <p
                 className="error"
-                id="error"
               />
               <div
                 className="form-group"
@@ -57,7 +56,6 @@ exports[`Component: Login Display Login 1`] = `
                 />
                 <p
                   className="text-left error"
-                  id="usernameError"
                 />
               </div>
               <div
@@ -74,7 +72,6 @@ exports[`Component: Login Display Login 1`] = `
                 />
                 <p
                   className="text-left error"
-                  id="passwordError"
                 />
               </div>
               <div

@@ -9,8 +9,6 @@ import { categoryAPIURL } from '../../config';
 import privateAxiosInstance from '../../config';
 import Header from '../common/Header';
 import FooterFlex from '../common/FooterFlex';
-import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -22,6 +20,7 @@ class AddCategory extends Component {
         this.state = {
             isAdded: false,
             categoryName: '',
+            error: '',
         };
     }
 
@@ -47,18 +46,19 @@ class AddCategory extends Component {
                 category_name: this.state.categoryName,
         })
         .then((response) => {
-            this.resetState()
-            this.setState({
-                isAdded: true,
-            })
-            toast.success('Category has been added.')
+            this.resetState();
+            if (response.status === 201) {
+                this.setState({
+                    isAdded: true,
+                })
+            }
         })
         .catch((error) => {
             if (error.response) {
-                if (error.response.status === 400) {
-                    document.getElementById("error").innerHTML = error.response.data['category_name_message'];
-                } else {
-                    document.getElementById("error").innerHTML = error.response.data['message'];
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
                 }
             } 
         });
@@ -81,7 +81,9 @@ class AddCategory extends Component {
                     <div className="row">
                         <div className="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
                             <form onSubmit={ this.addCategoryHandler }>
-                                <p id="error" className="error"></p>
+                                { this.state.error['message'] !== 'Valid' ? (
+                                <p className="error">{ this.state.error['message'] }</p>
+                                ): (<p/>)}
                                 <div className="form-group">
                                     <input
                                         className="form-control"
@@ -91,9 +93,13 @@ class AddCategory extends Component {
                                         onChange={ this.onInputChanged }
                                         maxLength="50"
                                         placeholder="Category name"/>
+                                        { this.state.error['category_name_message'] !== 'Valid' ? (
+                                        <p className="error">{ this.state.error['category_name_message'] }</p>
+                                        ): (<p/>)}
                                 </div>
                                 <div className="form-group">
                                     <button type="submit" id="addCategory" className="btn btn-primary btn-block App-btn-add">ADD</button>
+                                    <a className="btn btn-primary btn-block App-btn-cancel" href="/" role="button">CANCEL</a>
                                 </div>
                             </form>
                         </div>

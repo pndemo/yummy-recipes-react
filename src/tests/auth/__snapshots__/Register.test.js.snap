@@ -41,7 +41,6 @@ exports[`Component: Register Display Register 1`] = `
             >
               <p
                 className="error"
-                id="error"
               />
               <div
                 className="form-group"
@@ -57,7 +56,6 @@ exports[`Component: Register Display Register 1`] = `
                 />
                 <p
                   className="text-left error"
-                  id="usernameError"
                 />
               </div>
               <div
@@ -74,7 +72,6 @@ exports[`Component: Register Display Register 1`] = `
                 />
                 <p
                   className="text-left error"
-                  id="emailError"
                 />
               </div>
               <div
@@ -87,11 +84,10 @@ exports[`Component: Register Display Register 1`] = `
                   onChange={[Function]}
                   placeholder="Password"
                   type="password"
-                  value=""
+                  value={undefined}
                 />
                 <p
                   className="text-left error"
-                  id="passwordError"
                 />
               </div>
               <div
@@ -104,11 +100,10 @@ exports[`Component: Register Display Register 1`] = `
                   onChange={[Function]}
                   placeholder="Confirm password"
                   type="password"
-                  value=""
+                  value={undefined}
                 />
                 <p
                   className="text-left error"
-                  id="confirmPasswordError"
                 />
               </div>
               <div

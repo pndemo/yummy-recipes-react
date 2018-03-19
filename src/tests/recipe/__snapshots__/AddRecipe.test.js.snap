@@ -103,7 +103,6 @@ exports[`Component: AddRecipe Display AddRecipe component 1`] = `
         >
           <p
             className="error"
-            id="error"
           />
           <div
             className="form-group"
@@ -119,7 +118,6 @@ exports[`Component: AddRecipe Display AddRecipe component 1`] = `
             />
             <p
               className="text-left error"
-              id="recipeNameError"
             />
           </div>
           <div
@@ -137,7 +135,6 @@ exports[`Component: AddRecipe Display AddRecipe component 1`] = `
             />
             <p
               className="text-left error"
-              id="ingredientsError"
             />
           </div>
           <div
@@ -155,7 +152,6 @@ exports[`Component: AddRecipe Display AddRecipe component 1`] = `
             />
             <p
               className="text-left error"
-              id="directionsError"
             />
           </div>
           <div
@@ -167,6 +163,13 @@ exports[`Component: AddRecipe Display AddRecipe component 1`] = `
             >
               ADD
             </button>
+            <a
+              className="btn btn-primary btn-block App-btn-cancel"
+              href="/recipes/1"
+              role="button"
+            >
+              CANCEL
+            </a>
           </div>
         </form>
       </div>

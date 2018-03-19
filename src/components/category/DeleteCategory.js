@@ -9,8 +9,6 @@ import { categoryAPIURL } from '../../config';
 import privateAxiosInstance from '../../config';
 import Header from '../common/Header';
 import FooterFlex from '../common/FooterFlex';
-import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -22,6 +20,7 @@ class DeleteCategory extends Component {
         this.state = {
             isDeleted: false,
             categoryName: '',
+            error: '',
         };
     }
 
@@ -36,9 +35,13 @@ class DeleteCategory extends Component {
         }
         })
         .catch((error) => {
-            if (error.response){
-                document.getElementById("error").innerHTML = error.response.data['message'];
-            }
+            if (error.response) {
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
+                }
+            } 
         });  
     }
 
@@ -47,15 +50,20 @@ class DeleteCategory extends Component {
         event.preventDefault();
         privateAxiosInstance.delete(`${ categoryAPIURL }${ this.props.match.params.category_id }`)
         .then((response) => {
-            this.setState({
-                isDeleted: true,
-            })
-            toast.success('Category has been deleted.')
+            if (response.status === 200) {
+                this.setState({
+                    isDeleted: true,
+                })
+            }
         })
         .catch((error) => {
-            if (error.response){
-                document.getElementById("error").innerHTML = error.response.data['message'];
-            }
+            if (error.response) {
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
+                }
+            } 
         });
     };
 
@@ -79,9 +87,12 @@ class DeleteCategory extends Component {
                                 <strong> { this.state.categoryName }</strong>?
                             </p>
                             <form onSubmit={ this.deleteCategoryHandler }>
-                                <p id="error" className="error"></p>
+                                { this.state.error['message'] !== 'Valid' ? (
+                                <p className="error">{ this.state.error['message'] }</p>
+                                ): (<p/>)}
                                 <div className="form-group">
                                     <button type="submit" className="btn btn-primary btn-block App-btn-add">Delete</button>
+                                    <a className="btn btn-primary btn-block App-btn-cancel" href="/" role="button">CANCEL</a>
                                 </div>
                             </form>
                         </div>

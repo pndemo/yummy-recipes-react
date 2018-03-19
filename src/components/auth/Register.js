@@ -8,7 +8,6 @@ import { Redirect } from 'react-router-dom';
 import { authAPIURL } from '../../config';
 import FooterStatic from '../common/FooterStatic';
 import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -20,9 +19,9 @@ class Register extends Component {
         this.state = {
             isRegistered: false,
             username: '',
+            usernameError: '',
             email: '',
-            password: '',
-            confirmPassword: '',
+            error: '',
         };
     }
 
@@ -48,42 +47,10 @@ class Register extends Component {
                 this.setState({
                     isRegistered: true,
                 })
-                toast.success('Your account has been created.')
             }
         })
         .catch((error) => {
-            if (error.response) {
-                if (error.response.status === 400) {
-                    let messages = error.response.data;
-                    if (messages['username_message'] !== 'Valid') {
-                        document.getElementById("usernameError").innerHTML = messages['username_message'];
-                    } else {
-                        document.getElementById("usernameError").innerHTML = "";
-                    }
-                    if (messages['email_message'] !== 'Valid') {
-                        document.getElementById("emailError").innerHTML = messages['email_message'];
-                    } else {
-                        document.getElementById("emailError").innerHTML = "";
-                    }
-                    if (messages['password_message'] !== 'Valid') {
-                        document.getElementById("passwordError").innerHTML = messages['password_message'];
-                    } else {
-                        document.getElementById("passwordError").innerHTML = "";
-                    }
-                    if (messages['confirm_password_message'] !== 'Valid') {
-                        document.getElementById("confirmPasswordError").innerHTML = messages['confirm_password_message'];
-                    } else {
-                        document.getElementById("confirmPasswordError").innerHTML = "";
-                    }
-                    document.getElementById("error").innerHTML = "";
-                } else {
-                    document.getElementById("error").innerHTML = error.response.data['message'];
-                    document.getElementById("usernameError").innerHTML = "";
-                    document.getElementById("emailError").innerHTML = "";
-                    document.getElementById("passwordError").innerHTML = "";
-                    document.getElementById("confirmPasswordError").innerHTML = "";
-                }
-            } 
+            this.setState({error: error.response.data});
         });
     };
 
@@ -108,7 +75,9 @@ class Register extends Component {
                                 </div>
                                 <div className="panel-body">
                                     <form onSubmit={ this.onRegisterClick }>
-                                        <p id="error" className="error"></p>
+                                        { this.state.error['message'] !== 'Valid' ? (
+                                        <p className="error">{ this.state.error['message'] }</p>
+                                        ): (<p/>)}
                                         <div className="form-group">
                                             <input
                                                 className="form-control"
@@ -118,7 +87,9 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="80"
                                                 placeholder="Username"/>
-                                                <p id="usernameError" className="text-left error"></p>
+                                                { this.state.error['username_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['username_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -129,7 +100,9 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Email address"/>
-                                                <p id="emailError" className="text-left error"></p>
+                                                { this.state.error['email_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['email_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -140,7 +113,9 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Password"/>
-                                                <p id="passwordError" className="text-left error"></p>
+                                                { this.state.error['password_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['password_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -151,7 +126,9 @@ class Register extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Confirm password"/>
-                                                <p id="confirmPasswordError" className="text-left error"></p>
+                                                { this.state.error['confirm_password_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['confirm_password_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <button type="submit" className="btn btn-primary btn-block">Register</button>

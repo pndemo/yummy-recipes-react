@@ -9,9 +9,6 @@ import { recipeAPIURL } from '../../config';
 import privateAxiosInstance from '../../config';
 import Header from '../common/Header';
 import FooterFlex from '../common/FooterFlex';
-import axios from 'axios'
-import Time from 'react-time-format'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -23,6 +20,7 @@ class DeleteRecipe extends Component {
         this.state = {
             isDeleted: false,
             recipeName: '',
+            error: '',
         };
     }
 
@@ -37,9 +35,13 @@ class DeleteRecipe extends Component {
             }
         })
         .catch((error) => {
-            if (error.response){
-                document.getElementById("error").innerHTML = error.response.data['message'];
-            }
+            if (error.response) {
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
+                }
+            } 
         });
     }
 
@@ -51,15 +53,20 @@ class DeleteRecipe extends Component {
             recipe_name: this.state.recipeName,
         })
         .then((response) => {
-            this.setState({
-                isDeleted: true,
-            })
-            toast.success('Recipe has been deleted.')
+            if (response.status === 200) {
+                this.setState({
+                    isDeleted: true,
+                })
+            }
         })
         .catch((error) => {
-            if (error.response){
-                document.getElementById("error").innerHTML = error.response.data['message'];
-            }
+            if (error.response) {
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
+                }
+            } 
         });
     };
 
@@ -83,9 +90,12 @@ class DeleteRecipe extends Component {
                                 <strong> { this.state.recipeName }</strong>?
                             </p>
                             <form onSubmit={ this.deleteRecipeHandler }>
-                                <p id="error" className="error"></p>
+                                { this.state.error['message'] !== 'Valid' ? (
+                                <p className="error">{ this.state.error['message'] }</p>
+                                ): (<p/>)}
                                 <div className="form-group">
                                     <button type="submit" className="btn btn-primary btn-block App-btn-add">Delete</button>
+                                    <a className="btn btn-primary btn-block App-btn-cancel" href={ '/recipes/'+this.props.match.params.category_id } role="button">CANCEL</a>
                                 </div>
                             </form>
                         </div>

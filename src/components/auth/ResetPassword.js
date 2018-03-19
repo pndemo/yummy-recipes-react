@@ -8,7 +8,6 @@ import { Redirect } from 'react-router-dom';
 import { authAPIURL } from '../../config';
 import FooterStatic from '../common/FooterStatic';
 import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -20,6 +19,7 @@ class ResetPassword extends Component {
         this.state = {
             isReset: false,
             email: '',
+            error: '',
         };
     }
 
@@ -42,15 +42,10 @@ class ResetPassword extends Component {
                 this.setState({
                     isReset: true,
                 })
-                toast.success('Your password has been reset.')
             }
         })
         .catch((error) => {
-            if (error.response.status === 400) {
-                document.getElementById("error").innerHTML = error.response.data['email_message'];
-            } else {
-                document.getElementById("error").innerHTML = error.response.data['message'];
-            }
+            this.setState({error: error.response.data});
         });
     };
 
@@ -75,7 +70,9 @@ class ResetPassword extends Component {
                                 </div>
                                 <div className="panel-body">
                                     <form onSubmit={ this.onResetClick }>
-                                        <p id="error" className="error"></p>
+                                        { this.state.error['message'] !== 'Valid' ? (
+                                        <p className="error">{ this.state.error['message'] }</p>
+                                        ): (<p/>)}
                                         <div className="form-group">
                                             <input
                                                 className="form-control"
@@ -85,7 +82,9 @@ class ResetPassword extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="100"
                                                 placeholder="Email address"/>
-                                                <p id="emailError" className="text-left error"></p>
+                                                { this.state.error['email_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['email_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <button type="submit" className="btn btn-primary btn-block">Submit</button>

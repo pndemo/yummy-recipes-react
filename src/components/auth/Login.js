@@ -8,7 +8,6 @@ import { Redirect } from 'react-router-dom';
 import { authAPIURL } from '../../config';
 import FooterStatic from '../common/FooterStatic';
 import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -21,6 +20,7 @@ class Login extends Component {
             isLoggedIn: localStorage.getItem('token'),
             username: '',
             password: '',
+            error: '',
         };
     }
 
@@ -43,36 +43,18 @@ class Login extends Component {
             if (response.status === 200) {
                 localStorage.setItem('token', response.data['access_token']);
                 this.setState({
-                    isLogged: true,
+                    isLoggedIn: true,
                 })
-                toast.success('You are now logged in.')
             }
         })
         .catch((error) => {
-            if (error.response.status === 400) {
-                let messages = error.response.data;
-                if (messages['username_message'] !== 'Valid') {
-                    document.getElementById("usernameError").innerHTML = messages['username_message'];
-                } else {
-                    document.getElementById("usernameError").innerHTML = "";
-                }
-                if (messages['password_message'] !== 'Valid') {
-                    document.getElementById("passwordError").innerHTML = messages['password_message'];
-                } else {
-                    document.getElementById("passwordError").innerHTML = "";
-                }
-                document.getElementById("error").innerHTML = "";
-            } else {
-                document.getElementById("error").innerHTML = error.response.data['message'];
-                document.getElementById("usernameError").innerHTML = "";
-                document.getElementById("passwordError").innerHTML = "";
-            }
+            this.setState({error: error.response.data});
         });
     };
 
     // Component rendering
     render() {
-        if (this.state.isLogged) {
+        if (this.state.isLoggedIn) {
             return <Redirect to="/"/>
         }
         return (
@@ -91,7 +73,9 @@ class Login extends Component {
                                 </div>
                                 <div className="panel-body">
                                     <form onSubmit={ this.onLoginClick }>
-                                        <p id="error" className="error"></p>
+                                        { this.state.error['message'] !== 'Valid' ? (
+                                        <p className="error">{ this.state.error['message'] }</p>
+                                        ): (<p/>)}
                                         <div className="form-group">
                                             <input
                                                 className="form-control"
@@ -101,7 +85,9 @@ class Login extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="50"
                                                 placeholder="Username"/>
-                                                <p id="usernameError" className="text-left error"></p>
+                                                { this.state.error['username_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['username_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -112,7 +98,9 @@ class Login extends Component {
                                                 onChange={ this.onInputChanged }
                                                 maxLength="50"
                                                 placeholder="Password"/>
-                                                <p id="passwordError" className="text-left error"></p>
+                                                { this.state.error['password_message'] !== 'Valid' ? (
+                                                <p className="text-left error">{ this.state.error['password_message'] }</p>
+                                                ): (<p/>)}
                                         </div>
                                         <div className="form-group">
                                             <button type="submit" className="btn btn-primary btn-block">Login</button>

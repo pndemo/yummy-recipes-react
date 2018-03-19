@@ -4,15 +4,12 @@
 */
 
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { baseAPIURL } from '../../config';
 import { recipeAPIURL } from '../../config';
 import privateAxiosInstance from '../../config';
 import Header from '../common/Header';
 import FooterFlex from '../common/FooterFlex';
-import axios from 'axios'
 import Time from 'react-time-format'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -22,27 +19,40 @@ class Recipes extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            category_name: '',
             recipes: [],
             previousLink: '',
             nextLink: '',
+            page: '',
+            pages: '',
             q: '',
+            error: '',
         };
     }
-
+    
     // Get category recipes
     componentWillMount() {
         privateAxiosInstance.get(`${ recipeAPIURL }${ this.props.match.params.category_id }/`)
         .then((response) => {
         if (response.status === 200) {
             this.setState({
+            category_name: response.data['category_name'],
             recipes: response.data['results'],
             previousLink: response.data['previous_link'],
             nextLink: response.data['next_link'],
+            page: response.data['page'],
+            pages: response.data['pages'],
             });
         }
         })
         .catch((error) => {
-            document.getElementById("error").innerHTML = error.response.data['message'];
+            if (error.response) {
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
+                }
+            }   
         });
     }
 
@@ -62,10 +72,18 @@ class Recipes extends Component {
             recipes: response.data['results'],
             previousLink: response.data['previous_link'],
             nextLink: response.data['next_link'],
+            page: response.data['page'],
+            pages: response.data['pages'],
             })
         })
         .catch((error) => {
-            document.getElementById("error").innerHTML = error.response.data['message'];
+            if (error.response) {
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
+                }
+            }   
         });
     };
 
@@ -78,10 +96,18 @@ class Recipes extends Component {
                 recipes: response.data['results'],
                 previousLink: response.data['previous_link'],
                 nextLink: response.data['next_link'],
+                page: response.data['page'],
+                pages: response.data['pages'],
             })
         })
         .catch((error) => {
-        document.getElementById("error").innerHTML = error.response.data['message'];
+            if (error.response) {
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
+                }
+            }   
         });
     };
 
@@ -94,10 +120,18 @@ class Recipes extends Component {
                 recipes: response.data['results'],
                 previousLink: response.data['previous_link'],
                 nextLink: response.data['next_link'],
+                page: response.data['page'],
+                pages: response.data['pages'],
             })
         })
         .catch((error) => {
-        document.getElementById("error").innerHTML = error.response.data['message'];
+            if (error.response) {
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
+                }
+            }   
         });
     };
 
@@ -109,10 +143,12 @@ class Recipes extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-xs-12">
-                        <h1 className="App-page-title">Recipes</h1>
+                        <h1 className="App-page-title">{ this.state.category_name } Recipes</h1>
                         </div>
                     </div>
-                    <p id="error" className="error"></p>
+                    { this.state.error['message'] !== 'Valid' ? (
+                    <p className="error">{ this.state.error['message'] }</p>
+                    ): (<p/>)}
                     <form onSubmit={ this.searchHandler }>
                         <div className="row">
                         <div className="col-xs-12 col-md-4">
@@ -179,7 +215,7 @@ class Recipes extends Component {
                         }
                     </div>
                     <div className="row">
-                        <div className="col-xs-6 text-left">
+                        <div className="col-xs-4 text-left">
                             { this.state.previousLink !== '' ? (
                             <form onSubmit={ this.getPreviousPage }>
                                 <button type="submit" className="btn btn-default search-button">
@@ -190,7 +226,10 @@ class Recipes extends Component {
                             <form/>
                             )}
                         </div>
-                        <div className="col-xs-6 text-right">
+                        <div className="col-xs-4 text-center">
+                            <p>Page { this.state.page } of { this.state.pages }</p>
+                        </div>
+                        <div className="col-xs-4 text-right">
                             { this.state.nextLink !== '' ? (
                             <form onSubmit={ this.getNextPage }>
                                 <button type="submit" className="btn btn-default search-button">

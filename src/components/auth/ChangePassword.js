@@ -9,8 +9,6 @@ import { authAPIURL } from '../../config';
 import privateAxiosInstance from '../../config';
 import Header from '../common/Header';
 import FooterFlex from '../common/FooterFlex';
-import axios from 'axios'
-import { ToastContainer, toast } from 'react-toastify';
 
 // Application styling
 import '../../static/App.css';
@@ -23,6 +21,7 @@ class ChangePassword extends Component {
             isChanged: false,
             newPassword: '',
             confirmNewPassword: '',
+            error: '',
         };
     }
 
@@ -46,28 +45,14 @@ class ChangePassword extends Component {
                 this.setState({
                     isChanged: true,
                 })
-                toast.success('Your password has been changed.')
             }
         })
         .catch((error) => {
             if (error.response) {
-                if (error.response.status === 400) {
-                    let messages = error.response.data;
-                    if (messages['new_password_message'] !== 'Valid') {
-                        document.getElementById("newPasswordError").innerHTML = messages['new_password_message'];
-                    } else {
-                        document.getElementById("newPasswordError").innerHTML = "";
-                    }
-                    if (messages['confirm_new_password_message'] !== 'Valid') {
-                        document.getElementById("confirmNewPasswordError").innerHTML = messages['confirm_new_password_message'];
-                    } else {
-                        document.getElementById("confirmNewPasswordError").innerHTML = "";
-                    }
-                    document.getElementById("error").innerHTML = "";
-                } else {
-                    document.getElementById("error").innerHTML = error.response.data['message'];
-                    document.getElementById("newPasswordError").innerHTML = "";
-                    document.getElementById("confirmNewPasswordError").innerHTML = "";
+                if (error.response.status === 400 || error.response.status === 500) {
+                    this.setState({error: error.response.data});
+                } else if (error.response.status === 401) {
+                    return window.location.href = '/login';
                 }
             } 
         });
@@ -90,7 +75,9 @@ class ChangePassword extends Component {
                     <div className="row">
                         <div className="col-xs-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
                             <form onSubmit={ this.onPasswordChange }>
-                                <p id="error" className="error"></p>
+                                { this.state.error['message'] !== 'Valid' ? (
+                                <p className="error">{ this.state.error['message'] }</p>
+                                ): (<p/>)}
                                 <div className="form-group">
                                     <input
                                         className="form-control"
@@ -100,7 +87,9 @@ class ChangePassword extends Component {
                                         onChange={ this.onInputChanged }
                                         maxLength="100"
                                         placeholder="New password"/>
-                                        <p id="newPasswordError" className="text-left error"></p>
+                                        { this.state.error['new_password_message'] !== 'Valid' ? (
+                                        <p className="text-left error">{ this.state.error['new_password_message'] }</p>
+                                        ): (<p/>)}
                                 </div>
                                 <div className="form-group">
                                     <input
@@ -111,7 +100,9 @@ class ChangePassword extends Component {
                                         onChange={ this.onInputChanged }
                                         maxLength="100"
                                         placeholder="Confirm new password"/>
-                                        <p id="confirmNewPasswordError" className="text-left error"></p>
+                                        { this.state.error['confirm_new_password_message'] !== 'Valid' ? (
+                                        <p className="text-left error">{ this.state.error['confirm_new_password_message'] }</p>
+                                        ): (<p/>)}
                                 </div>
                                 <div className="form-group">
                                     <button type="submit" className="btn btn-primary btn-block App-btn-add">SUBMIT</button>

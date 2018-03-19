@@ -10,12 +10,6 @@ export const authAPIURL = baseAPIURL.concat('/api/v1/auth/');
 export const categoryAPIURL = baseAPIURL.concat('/api/v1/category/');
 export const recipeAPIURL = baseAPIURL.concat('/api/v1/recipe/');
 
-// local storage
-global.localStorage = {
-  getItem: () => {},
-  setItem: () => {},
-};
-
 // axios instance for private API calls
 const privateAxiosInstance = axios.create({
   headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
